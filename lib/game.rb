@@ -4,8 +4,8 @@ class Game
     #require_relative 'player'
     attr_accessor :human_player, :players_left, :enemies_in_sight
 
-    def initialize(name)
-        @players_left = 10
+    def initialize(name, nb)
+        @players_left = nb
         @enemies_in_sight = []
         @human_player = HumanPlayer.new(name)
     end  
@@ -28,14 +28,23 @@ class Game
             if karma == 1
                 puts "Tu as de la chance, aucun nouvel ennemi en vue."
             elsif karma < 5
-                i = @enemies_in_sight.length
-                @enemies_in_sight << Player.new("NouveauGugus#{i}") 
-                puts "Mauvaise Nouvelle... le camp adverse se renforce : #{@enemies_in_sight[-1].name} a rejoint l'ennemi"
+                #je sais que j'ai au moins un ennemi pas en vue, je peux l'ajouter sans souci
+                @enemies_in_sight << Player.new("NouveauGugus#{rand(100..999)}") 
+                puts "Mauvaise Nouvelle... le camp adverse se renforce : #{@enemies_in_sight[-1].name} approche"
             else
-                i = @enemies_in_sight.length
-                @enemies_in_sight << Player.new("NouveauGugus#{i}")
-                @enemies_in_sight << Player.new("NouveauGugus#{i+1}")
-                puts "Catastrophe ! ils arrivent !! #{@enemies_in_sight[-1].name} et #{@enemies_in_sight[-2].name} ont rejoint l'ennemi"
+                #j'ajoute 2 ennemis, sauf s'il n'y en a plus qu'un pas en vue dans les players_left, et là j'en ajoute qu'un
+                if @players_left - @enemies_in_sight.length == 1 
+                    new1 = Player.new("NouveauGugus#{rand(100..999)}")
+                    @enemies_in_sight << new1
+                    puts "Mauvaise Nouvelle... le camp adverse se renforce : #{@enemies_in_sight[-1].name} approche"
+            
+                else
+                    new1 = Player.new("NouveauGugus#{rand(100..999)}")
+                    @enemies_in_sight << new1
+                    new2 = Player.new("NouveauGugus#{rand(100..999)}")
+                    @enemies_in_sight << new2
+                end 
+                puts "Catastrophe ! ils arrivent !! #{@enemies_in_sight[-1].name} et #{@enemies_in_sight[-2].name} approchent"
             end
         end 
     end  
@@ -108,6 +117,5 @@ class Game
             puts "LOSER !!!! TU AS PERDU"
         end 
     end 
-
 end 
 

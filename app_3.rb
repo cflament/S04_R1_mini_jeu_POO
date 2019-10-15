@@ -20,7 +20,26 @@ def user_player_name
     puts "Quel sera ton nom de player ?"
     name = gets.chomp.to_s
     return name
+end
+
+def user_enemies_number
+    nb = 0
+    while nb <= 0 || nb > 1000 || nb.class != Integer
+        puts "Alors dis moi, combien d'ennemis tu veux essayer de dégommer ?"
+        nb = gets.chomp.to_i 
+        if nb > 1000
+            puts "Essaie de pas monter au dessus de 1000 ennemis, sinon une vie ne te suffira pas pour finir mon jeu..."
+        end 
+        if nb == 0
+            puts "Ca te paraît plus simple quand il n'y a pas d'ennemis ? Allez crois en toi tu vas y arriver !"
+        end 
+        if nb < 0
+            puts "Trop de THP... ton cerveau a dû griller... on ne peut pas avoir un nombre d'ennemis négatif, enfin !"
+        end
+    end 
+    return nb 
 end 
+
 
 def new_round(x)
     line = "-" * 100
@@ -34,8 +53,10 @@ def play
     welcome
     #donner un nom au joueur humain
     name = user_player_name
+    #demander à l'utilisateur combien d'ennemis il veut combattre
+    nb = user_enemies_number
     #créer ma nouvelle partie
-    my_game = Game.new(name)
+    my_game = Game.new(name, nb)
     count = 0 
     #on lance la boucle de toutes les parties
     while my_game.is_still_ongoing?
@@ -51,9 +72,9 @@ def play
         gets.chomp
         #faire jouer le human player
         my_game.menu_choice(my_game.menu)
-        puts line 
-        #faire riposter l'ennemi
+        #faire riposter l'ennemi si certains sont encore en vie
         if my_game.enemies_in_sight.length != 0
+            puts line 
             puts "\nATTENTION !! Les ennemis lancent une attaque : "
             gets.chomp
             my_game.enemies_attack

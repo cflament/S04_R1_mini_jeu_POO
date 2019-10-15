@@ -4,7 +4,6 @@ Bundler.require
 require_relative 'lib/game'
 require_relative 'lib/player'
 
-#First battle
 player1 = Player.new("Josiane")
 player2 = Player.new("José")
 
@@ -35,9 +34,6 @@ def fight_until_death(player1,player2)
     end 
 
     puts "\n Après #{count} combats, j'ai le regret de t'annoncer que #{loser} est mort."
-
-
 end 
 
 fight_until_death(player1,player2)
-#binding.pry
